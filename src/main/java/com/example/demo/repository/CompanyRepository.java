@@ -1,6 +1,7 @@
 package com.example.demo.repository;
 
 import com.example.demo.entity.Company;
+import com.example.demo.entity.Employee;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -8,7 +9,7 @@ import java.util.List;
 
 @Repository
 public class CompanyRepository {
-    private final List<Company> companies = new ArrayList<>();
+    public final List<Company> companies = new ArrayList<>();
 
     public List<Company> getCompanies(Integer page, Integer size) {
         if (page != null && size != null) {
@@ -36,7 +37,8 @@ public class CompanyRepository {
         companies.remove(found);
     }
 
-    public Company updateCompany(Company found, Company updatedCompany) {
+    public Company updateCompany(int id, Company updatedCompany) {
+        Company found = getCompanyById(id);
         found.setName(updatedCompany.getName());
         return found;
     }

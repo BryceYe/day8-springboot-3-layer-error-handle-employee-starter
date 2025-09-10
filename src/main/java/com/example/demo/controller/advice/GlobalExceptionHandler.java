@@ -2,6 +2,7 @@ package com.example.demo.controller.advice;
 
 import com.example.demo.exception.InvalidAgeEmployeeException;
 import com.example.demo.exception.InvalidSalaryEmployeeException;
+import com.example.demo.exception.UpdateCompanyException;
 import com.example.demo.exception.UpdateEmployeeException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -36,6 +37,11 @@ public class GlobalExceptionHandler {
         return new ResponseException(e.getMessage());
     }
 
+    @ExceptionHandler(UpdateCompanyException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ResponseException exceptionHandler5(Exception e){
+        return new ResponseException(e.getMessage());
+    }
 
 
 }

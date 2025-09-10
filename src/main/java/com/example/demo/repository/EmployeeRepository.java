@@ -10,7 +10,7 @@ import java.util.stream.Stream;
 
 @Repository
 public class EmployeeRepository {
-    private final List<Employee> employees = new ArrayList<>();
+    public final List<Employee> employees = new ArrayList<>();
 
     public List<Employee> getEmployees(String gender, Integer page, Integer size) {
         Stream<Employee> stream = employees.stream();

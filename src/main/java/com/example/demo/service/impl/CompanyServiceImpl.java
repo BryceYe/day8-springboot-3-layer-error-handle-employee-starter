@@ -1,6 +1,7 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.entity.Company;
+import com.example.demo.exception.UpdateCompanyException;
 import com.example.demo.repository.CompanyRepository;
 import com.example.demo.service.CompanyService;
 import lombok.RequiredArgsConstructor;
@@ -35,13 +36,20 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Override
     public void deleteCompany(int id) {
-        Company found = getCompanyById(id);
-        companyRepository.deleteCompany(found);
+        Company company = getCompanyById(id);
+        company.setActive(false);
+        companyRepository.updateCompany(id, company);
     }
 
     @Override
     public Company updateCompany(int id, Company updatedCompany) {
         Company found = companyRepository.getCompanyById(id);
-        return companyRepository.updateCompany(found, updatedCompany);
+        if(found == null) {
+            throw new UpdateCompanyException("Company not found");
+        }
+        if(!found.isActive()) {
+            throw new UpdateCompanyException("Company's active is false");
+        }
+        return companyRepository.updateCompany(id, updatedCompany);
     }
 }

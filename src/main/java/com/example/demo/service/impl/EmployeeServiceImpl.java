@@ -56,9 +56,9 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     public void deleteEmployee(int id) {
-        Employee found = getEmployeeById(id);
-        found.setActive(false);
-//        employeeRepository.deleteEmployee(found);
+        Employee employee = getEmployeeById(id);
+        employee.setActive(false);
+        employeeRepository.updateEmployee(id, employee);
     }
 
     public void empty() {

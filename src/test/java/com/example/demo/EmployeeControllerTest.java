@@ -1,6 +1,7 @@
 package com.example.demo;
 
 import com.example.demo.entity.Employee;
+import com.example.demo.repository.EmployeeRepository;
 import com.google.gson.Gson;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,6 +20,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class EmployeeControllerTest {
     @Autowired
     private MockMvc mockMvc;
+
+    @Autowired
+    private EmployeeRepository employeeRepository;
+
+    @BeforeEach
+    public void setUp(){
+        employeeRepository.employees.clear();
+    }
 
     private void createJohnSmith() throws Exception {
         Gson gson = new Gson();
@@ -167,7 +176,7 @@ public class EmployeeControllerTest {
                 .andExpect(jsonPath("$.length()").value(5));
     }
 
-
+    // case2
     @Test
     void should_return_employee_active_true_when_create_an_employee() throws Exception {
         Gson gson = new Gson();
@@ -179,6 +188,7 @@ public class EmployeeControllerTest {
             .andExpect(jsonPath("$.active").value(true));
     }
 
+    // case3
     @Test
     void should_return_204_when_delete_employee() throws Exception {
         Gson gson = new Gson();
@@ -211,6 +221,7 @@ public class EmployeeControllerTest {
 
     }
 
+    // case1
     @Test
     void should_return_400_when_create_age_30_employee_and_salary_15000() throws Exception {
         Gson gson = new Gson();
@@ -223,8 +234,12 @@ public class EmployeeControllerTest {
 
     @Test
     void should_return_404_when_update_an_un_exist_employee() throws Exception {
+        createJohnSmith();
+        mockMvc.perform(delete("/employees/1"));
+
         Gson gson = new Gson();
         String updateJohn = gson.toJson(new Employee(1, "John Smith", 28, "MALE", 15000.0));
+
         mockMvc.perform(put("/employees/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(updateJohn))

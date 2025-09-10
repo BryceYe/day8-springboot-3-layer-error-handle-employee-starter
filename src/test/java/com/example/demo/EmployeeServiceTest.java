@@ -6,6 +6,7 @@ import com.example.demo.exception.InvalidSalaryEmployeeException;
 import com.example.demo.exception.UpdateEmployeeException;
 import com.example.demo.repository.EmployeeRepository;
 import com.example.demo.service.impl.EmployeeServiceImpl;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -71,6 +72,7 @@ public class EmployeeServiceTest {
         assertTrue(employee.isActive());
         when(employeeRepository.getEmployeeById(1)).thenReturn(employee);
         employeeServiceImpl.deleteEmployee(1);
+
         assertThrows(UpdateEmployeeException.class, () -> employeeServiceImpl.updateEmployee(1,new Employee(1, "John", 28, "male", 65000.0)));
     }
 
