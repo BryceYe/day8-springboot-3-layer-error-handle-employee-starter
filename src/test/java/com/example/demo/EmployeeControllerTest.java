@@ -1,6 +1,5 @@
 package com.example.demo;
 
-import com.example.demo.controller.EmployeeController;
 import com.example.demo.entity.Employee;
 import com.google.gson.Gson;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,16 +20,6 @@ public class EmployeeControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-
-//    private static Employee employee(String name, int age, String gender, double salary) {
-//        Employee e = new Employee();
-//        e.setName(name);
-//        e.setAge(age);
-//        e.setGender(gender);
-//        e.setSalary(salary);
-//        return e;
-//    }
-//
     private void createJohnSmith() throws Exception {
         Gson gson = new Gson();
         String john = gson.toJson(new Employee(null, "John Smith", 28, "MALE", 60000.0));
@@ -147,27 +136,21 @@ public class EmployeeControllerTest {
                 .andExpect(status().isNoContent());
     }
 
-//    @Test
-//    void should_status_200_when_update_employee() throws Exception {
-//        Employee expect = employeeController.createEmployee(johnSmith());
-//        String requestBody = """
-//                        {
-//                            "name": "John Smith",
-//                            "age": 29,
-//                            "gender": "MALE",
-//                            "salary": 65000.0
-//                        }
-//                """;
+    @Test
+    void should_status_200_when_update_employee() throws Exception {
+        createJohnSmith();
+        Gson gson = new Gson();
+        String updateJohn = gson.toJson(new Employee(1, "John Smith", 29, "MALE", 65000.0));
 
-//        mockMvc.perform(put("/employees/" + expect.getId())
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content(requestBody)
-//                )
-//                .andExpect(status().isOk())
-//                .andExpect(jsonPath("$.id").value(expect.getId()))
-//                .andExpect(jsonPath("$.age").value(29))
-//                .andExpect(jsonPath("$.salary").value(65000.0));
-//    }
+        mockMvc.perform(put("/employees/" + 1)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(updateJohn)
+                )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(1))
+                .andExpect(jsonPath("$.age").value(29))
+                .andExpect(jsonPath("$.salary").value(65000.0));
+    }
 
 //    @Test
 //    void should_status_200_and_return_paged_employee_list() throws Exception {
