@@ -1,6 +1,7 @@
 package com.example.demo.repository;
 
 import com.example.demo.entity.Employee;
+import com.example.demo.exception.UpdateEmployeeException;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -36,7 +37,8 @@ public class EmployeeRepository {
         return employee;
     }
 
-    public Employee updateEmployee(Employee found, Employee updatedEmployee) {
+    public Employee updateEmployee(int id, Employee updatedEmployee) {
+        Employee found = getEmployeeById(id);
         found.setName(updatedEmployee.getName());
         found.setAge(updatedEmployee.getAge());
         found.setGender(updatedEmployee.getGender());

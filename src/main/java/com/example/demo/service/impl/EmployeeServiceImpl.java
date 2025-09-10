@@ -3,9 +3,11 @@ package com.example.demo.service.impl;
 import com.example.demo.entity.Employee;
 import com.example.demo.exception.InvalidAgeEmployeeException;
 import com.example.demo.exception.InvalidSalaryEmployeeException;
+import com.example.demo.exception.UpdateEmployeeException;
 import com.example.demo.repository.EmployeeRepository;
 import com.example.demo.service.EmployeeService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -43,13 +45,19 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     public Employee updateEmployee(int id, Employee updatedEmployee) {
-        Employee found = getEmployeeById(id);
-        return employeeRepository.updateEmployee(found, updatedEmployee);
+        Employee found = employeeRepository.getEmployeeById(id);
+        if(!found.isActive()){
+            throw new UpdateEmployeeException("Employee's active is false");
+        }
+        return employeeRepository.updateEmployee(id, updatedEmployee);
     }
 
     public void deleteEmployee(int id) {
         Employee found = getEmployeeById(id);
         employeeRepository.deleteEmployee(found);
+
+        found.setActive(false);
+        employeeRepository.updateEmployee(found.getId(), found);
     }
 
     public void empty() {
