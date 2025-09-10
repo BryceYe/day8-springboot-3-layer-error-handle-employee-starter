@@ -47,4 +47,15 @@ public class EmployeeServiceTest {
 
         assertThrows(InvalidSalaryEmployeeException.class, () -> employeeServiceImpl.createEmployee(employee));
     }
+
+    @Test
+    void should_create_employee_with_default_true_when_create_an_employee(){
+        Employee employee = new Employee(null, "Tom", 20, "MALE", 20000.0);
+        employeeServiceImpl.createEmployee(employee);
+        when(employeeRepository.createEmployee(any(Employee.class))).thenReturn(employee);
+        employeeServiceImpl.createEmployee(employee);
+        assertEquals(true, employee.isActive());
+    }
+
+
 }
