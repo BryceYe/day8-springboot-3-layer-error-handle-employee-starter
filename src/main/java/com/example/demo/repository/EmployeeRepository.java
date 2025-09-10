@@ -1,16 +1,10 @@
 package com.example.demo.repository;
 
 import com.example.demo.entity.Employee;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Stream;
 
 @Repository
@@ -42,22 +36,16 @@ public class EmployeeRepository {
         return employee;
     }
 
-    public Employee updateEmployee(int id, Employee updatedEmployee) {
-        Employee found = null;
-        for (Employee e : employees) {
-            if (Objects.equals(e.getId(), id)) {
-                found = e;
-                break;
-            }
-        }
-        if (found == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Employee not found with id: " + id);
-        }
+    public Employee updateEmployee(Employee found, Employee updatedEmployee) {
         found.setName(updatedEmployee.getName());
         found.setAge(updatedEmployee.getAge());
         found.setGender(updatedEmployee.getGender());
         found.setSalary(updatedEmployee.getSalary());
         return found;
+    }
+
+    public void deleteEmployee(Employee found) {
+        employees.remove(found);
     }
 
     public void empty() {

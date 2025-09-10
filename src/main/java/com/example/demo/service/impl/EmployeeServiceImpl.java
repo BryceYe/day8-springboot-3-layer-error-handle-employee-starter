@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -30,6 +31,16 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     public Employee createEmployee(Employee employee) {
         return employeeRepository.createEmployee(employee);
+    }
+
+    public Employee updateEmployee(int id, Employee updatedEmployee) {
+        Employee found = getEmployeeById(id);
+        return employeeRepository.updateEmployee(found, updatedEmployee);
+    }
+
+    public void deleteEmployee(int id) {
+        Employee found = getEmployeeById(id);
+        employeeRepository.deleteEmployee(found);
     }
 
     public void empty() {
