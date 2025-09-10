@@ -1,5 +1,8 @@
-package com.example.demo;
+package com.example.demo.controller;
 
+import com.example.demo.entity.Employee;
+import com.example.demo.service.EmployeeService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -10,8 +13,11 @@ import java.util.Objects;
 import java.util.stream.Stream;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/employees")
 public class EmployeeController {
+    private final EmployeeService employeeService;
+
     private final List<Employee> employees = new ArrayList<>();
 
     @GetMapping

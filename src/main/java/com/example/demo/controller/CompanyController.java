@@ -1,5 +1,8 @@
-package com.example.demo;
+package com.example.demo.controller;
 
+import com.example.demo.entity.Company;
+import com.example.demo.service.CompanyService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -8,8 +11,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/companies")
 public class CompanyController {
+    private final CompanyService companyService;
+
     private final List<Company> companies = new ArrayList<>();
 
     public void empty() {
