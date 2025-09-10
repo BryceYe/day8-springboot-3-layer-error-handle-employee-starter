@@ -33,7 +33,7 @@ public class EmployeeControllerTest {
 //
     private void createJohnSmith() throws Exception {
         Gson gson = new Gson();
-        String john = gson.toJson(new Employee(null, "John SMITH", 28, "MALE", 60000.0));
+        String john = gson.toJson(new Employee(null, "John Smith", 28, "MALE", 60000.0));
         mockMvc.perform(post("/employees").contentType(MediaType.APPLICATION_JSON).content(john));
 
     }
@@ -46,8 +46,9 @@ public class EmployeeControllerTest {
     }
 
     @BeforeEach
-    void cleanEmployees() {
-//        employeeController.empty();
+    void cleanEmployees() throws Exception {
+        mockMvc.perform(delete("/employees/all"));
+
     }
 
     @Test
@@ -68,19 +69,19 @@ public class EmployeeControllerTest {
                 .andExpect(jsonPath("$.length()").value(2));
     }
 
-//    @Test
-//    void should_return_employee_when_employee_found() throws Exception {
-//        Employee expect = employeeController.createEmployee(johnSmith());
-//
-//        mockMvc.perform(get("/employees/1")
-//                        .contentType(MediaType.APPLICATION_JSON))
-//                .andExpect(status().isOk());
-//                .andExpect(jsonPath("$.id").value(expect.getId()))
-//                .andExpect(jsonPath("$.name").value(expect.getName()))
-//                .andExpect(jsonPath("$.age").value(expect.getAge()))
-//                .andExpect(jsonPath("$.gender").value(expect.getGender()))
-//                .andExpect(jsonPath("$.salary").value(expect.getSalary()));
-//    }
+    @Test
+    void should_return_employee_when_employee_found() throws Exception {
+        createJohnSmith();
+
+        mockMvc.perform(get("/employees/1")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(1))
+                .andExpect(jsonPath("$.name").value("John Smith"))
+                .andExpect(jsonPath("$.age").value(28))
+                .andExpect(jsonPath("$.gender").value("MALE"))
+                .andExpect(jsonPath("$.salary").value(60000.0));
+    }
 
 //    @Test
 //    void should_return_male_employee_when_employee_found() throws Exception {
