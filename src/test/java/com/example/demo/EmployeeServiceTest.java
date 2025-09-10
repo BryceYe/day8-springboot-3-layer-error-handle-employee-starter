@@ -62,6 +62,15 @@ public class EmployeeServiceTest {
         assertTrue(employee.isActive());
         when(employeeRepository.getEmployeeById(1)).thenReturn(employee);
         employeeServiceImpl.deleteEmployee(1);
+        assertFalse(employee.isActive());
+    }
+
+    @Test
+    void should_return_error_message_when_update_active_false_employee(){
+        Employee employee = new Employee(1, "John", 28, "male", 60000.0);
+        assertTrue(employee.isActive());
+        when(employeeRepository.getEmployeeById(1)).thenReturn(employee);
+        employeeServiceImpl.deleteEmployee(1);
         assertThrows(UpdateEmployeeException.class, () -> employeeServiceImpl.updateEmployee(1,new Employee(1, "John", 28, "male", 65000.0)));
     }
 
