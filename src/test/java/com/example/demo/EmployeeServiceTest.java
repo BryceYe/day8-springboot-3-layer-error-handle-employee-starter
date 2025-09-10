@@ -62,7 +62,7 @@ public class EmployeeServiceTest {
         assertTrue(employee.isActive());
         when(employeeRepository.getEmployeeById(1)).thenReturn(employee);
         employeeServiceImpl.deleteEmployee(1);
-        assertFalse(employee.isActive());
+        verify(employeeRepository).updateEmployee(eq(1),argThat(employee1 -> !employee1.isActive()));
     }
 
     @Test

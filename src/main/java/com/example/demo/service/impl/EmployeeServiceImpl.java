@@ -46,6 +46,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     public Employee updateEmployee(int id, Employee updatedEmployee) {
         Employee found = employeeRepository.getEmployeeById(id);
+        if(found == null) {
+            throw new UpdateEmployeeException("Employee is not found");
+        }
         if(!found.isActive()){
             throw new UpdateEmployeeException("Employee's active is false");
         }
@@ -55,7 +58,6 @@ public class EmployeeServiceImpl implements EmployeeService {
     public void deleteEmployee(int id) {
         Employee found = getEmployeeById(id);
         found.setActive(false);
-        employeeRepository.updateEmployee(found.getId(), found);
 //        employeeRepository.deleteEmployee(found);
     }
 
