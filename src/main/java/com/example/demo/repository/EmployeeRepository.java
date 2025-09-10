@@ -43,6 +43,7 @@ public class EmployeeRepository {
         found.setAge(updatedEmployee.getAge());
         found.setGender(updatedEmployee.getGender());
         found.setSalary(updatedEmployee.getSalary());
+        found.setActive(updatedEmployee.isActive());
         return found;
     }
 

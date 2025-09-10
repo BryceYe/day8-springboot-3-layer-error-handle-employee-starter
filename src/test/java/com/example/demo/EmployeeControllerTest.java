@@ -167,14 +167,31 @@ public class EmployeeControllerTest {
                 .andExpect(jsonPath("$.length()").value(5));
     }
 
-//    @Test
-//    void should_throw_exception_when_create_an_employee_of_greater_than_65_or_less_than_18() throws Exception {
-//        Gson gson = new Gson();
-//        String john = gson.toJson(new Employee(null, "John Smith", 15, "MALE", 60000.0));
-//
-//        mockMvc.perform(post("/employees")
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .content(john))
-//            .andExpect(status().isBadRequest());
-//    }
+
+    @Test
+    void should_return_employee_active_true_when_create_an_employee() throws Exception {
+        Gson gson = new Gson();
+        String john = gson.toJson(new Employee(null, "John Smith", 28, "MALE", 60000.0));
+        mockMvc.perform(post("/employees")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(john))
+            .andExpect(status().isCreated())
+            .andExpect(jsonPath("$.active").value(true));
+    }
+
+    @Test
+    void should_return_204_when_delete_employee() throws Exception {
+        Gson gson = new Gson();
+        String john = gson.toJson(new Employee(null, "John Smith", 28, "MALE", 60000.0));
+        mockMvc.perform(post("/employees").contentType(MediaType.APPLICATION_JSON).content(john));
+
+        mockMvc.perform(delete("/employees/" + 1))
+            .andExpect(status().isNoContent());
+
+        mockMvc.perform(get("/employees/" + 1))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.active").value(false));
+    }
+
+
 }

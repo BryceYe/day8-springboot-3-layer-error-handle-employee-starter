@@ -5,7 +5,6 @@ import com.example.demo.exception.InvalidAgeEmployeeException;
 import com.example.demo.exception.InvalidSalaryEmployeeException;
 import com.example.demo.exception.UpdateEmployeeException;
 import com.example.demo.repository.EmployeeRepository;
-import com.example.demo.service.EmployeeService;
 import com.example.demo.service.impl.EmployeeServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
