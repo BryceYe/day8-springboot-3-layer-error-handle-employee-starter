@@ -166,4 +166,15 @@ public class EmployeeControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(5));
     }
+
+//    @Test
+//    void should_throw_exception_when_create_an_employee_of_greater_than_65_or_less_than_18() throws Exception {
+//        Gson gson = new Gson();
+//        String john = gson.toJson(new Employee(null, "John Smith", 15, "MALE", 60000.0));
+//
+//        mockMvc.perform(post("/employees")
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .content(john))
+//            .andExpect(status().isBadRequest());
+//    }
 }

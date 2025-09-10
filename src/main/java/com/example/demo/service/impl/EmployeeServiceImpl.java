@@ -1,6 +1,8 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.entity.Employee;
+import com.example.demo.exception.InvalidAgeEmployeeException;
+import com.example.demo.exception.InvalidSalaryEmployeeException;
 import com.example.demo.repository.EmployeeRepository;
 import com.example.demo.service.EmployeeService;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +30,15 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     public Employee createEmployee(Employee employee) {
+        if(employee.getAge() == null) {
+            throw new InvalidAgeEmployeeException("employee age is null");
+        }
+        if(employee.getAge() < 18 || employee.getAge() > 65) {
+            throw new InvalidAgeEmployeeException("employee age less than 18 or greater than 65");
+        }
+        if(employee.getAge() >= 30 && employee.getSalary() < 20000.0){
+            throw new InvalidSalaryEmployeeException("employee salary less than 20000");
+        }
         return employeeRepository.createEmployee(employee);
     }
 
