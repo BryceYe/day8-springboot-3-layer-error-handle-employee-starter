@@ -1,8 +1,6 @@
 package com.example.demo;
 
-import com.example.demo.controller.CompanyController;
 import com.example.demo.entity.Company;
-import com.example.demo.entity.Employee;
 import com.example.demo.repository.CompanyRepository;
 import com.google.gson.Gson;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,12 +22,9 @@ public class CompanyControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @Autowired
-    private CompanyRepository companyRepository;
-
     @BeforeEach
-    public void setUp() {
-        companyRepository.companies.clear();
+    public void setUp() throws Exception {
+        mockMvc.perform(delete("/companies/all"));
     }
 
     private void createCompany() throws Exception {

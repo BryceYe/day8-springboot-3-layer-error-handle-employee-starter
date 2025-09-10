@@ -9,7 +9,7 @@ import java.util.List;
 
 @Repository
 public class CompanyRepository {
-    public final List<Company> companies = new ArrayList<>();
+    private final List<Company> companies = new ArrayList<>();
 
     public List<Company> getCompanies(Integer page, Integer size) {
         if (page != null && size != null) {
@@ -41,5 +41,9 @@ public class CompanyRepository {
         Company found = getCompanyById(id);
         found.setName(updatedCompany.getName());
         return found;
+    }
+
+    public void empty() {
+        companies.clear();
     }
 }

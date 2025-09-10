@@ -10,6 +10,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.Arrays;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.verify;
@@ -56,5 +59,16 @@ public class CompanyServiceTest {
         companyServiceImpl.deleteCompany(1);
 
         assertThrows(UpdateCompanyException.class, () -> companyServiceImpl.updateCompany(1,new Company(1, "huawei")));
+    }
+
+    @Test
+    void should_return_list_when_get_companies(){
+        List<Company> companies = Arrays.asList(
+                new Company(1, "huawei"),
+                new Company(2, "apple"));
+        when(companyRepository.getCompanies(anyInt(),anyInt())).thenReturn(companies);
+        List<Company> result = companyServiceImpl.getCompanies(1, 2);
+        verify(companyRepository).getCompanies(eq(1),eq(2));
+        assertTrue(result.get(0).getName().equals(companies.get(0).getName()));
     }
 }

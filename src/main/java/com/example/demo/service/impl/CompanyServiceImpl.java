@@ -52,4 +52,9 @@ public class CompanyServiceImpl implements CompanyService {
         }
         return companyRepository.updateCompany(id, updatedCompany);
     }
+
+    @Override
+    public void empty() {
+        companyRepository.empty();
+    }
 }
