@@ -14,6 +14,4 @@ public interface CompanyService {
     void deleteCompany(int id);
 
     Company updateCompany(int id, Company updatedCompany);
-
-    void empty();
 }

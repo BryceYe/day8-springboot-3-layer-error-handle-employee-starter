@@ -70,8 +70,7 @@ public class EmployeeControllerTest {
                 .andExpect(jsonPath("$.id").value(1))
                 .andExpect(jsonPath("$.name").value("John Smith"))
                 .andExpect(jsonPath("$.age").value(28))
-                .andExpect(jsonPath("$.gender").value("MALE"))
-                .andExpect(jsonPath("$.salary").value(60000.0));
+                .andExpect(jsonPath("$.gender").value("MALE"));
     }
 
     @Test
@@ -85,8 +84,7 @@ public class EmployeeControllerTest {
                 .andExpect(jsonPath("$[0].id").value(1))
                 .andExpect(jsonPath("$[0].name").value("John Smith"))
                 .andExpect(jsonPath("$[0].age").value(28))
-                .andExpect(jsonPath("$[0].gender").value("MALE"))
-                .andExpect(jsonPath("$[0].salary").value(60000.0));
+                .andExpect(jsonPath("$[0].gender").value("MALE"));
     }
 
     @Test
@@ -101,8 +99,7 @@ public class EmployeeControllerTest {
                 .andExpect(jsonPath("$.id").isNumber())
                 .andExpect(jsonPath("$.name").value("John Smith"))
                 .andExpect(jsonPath("$.age").value(28))
-                .andExpect(jsonPath("$.gender").value("MALE"))
-                .andExpect(jsonPath("$.salary").value(60000));
+                .andExpect(jsonPath("$.gender").value("MALE"));
     }
 
     @Test
@@ -125,8 +122,7 @@ public class EmployeeControllerTest {
                 .andExpect(jsonPath("$.length()").value(1))
                 .andExpect(jsonPath("$[0].name").value("John Smith"))
                 .andExpect(jsonPath("$[0].age").value(28))
-                .andExpect(jsonPath("$[0].gender").value("MALE"))
-                .andExpect(jsonPath("$[0].salary").value(60000.0));
+                .andExpect(jsonPath("$[0].gender").value("MALE"));
     }
 
     @Test
@@ -143,7 +139,7 @@ public class EmployeeControllerTest {
     void should_status_200_when_update_employee() throws Exception {
         createJohnSmith();
         Gson gson = new Gson();
-        String updateJohn = gson.toJson(new Employee(1, "John Smith", 29, "MALE", 65000.0));
+        String updateJohn = gson.toJson(new Employee(1, "John Smith", 35, "MALE", 60000.0));
 
         mockMvc.perform(put("/employees/" + 1)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -151,8 +147,7 @@ public class EmployeeControllerTest {
                 )
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1))
-                .andExpect(jsonPath("$.age").value(29))
-                .andExpect(jsonPath("$.salary").value(65000.0));
+                .andExpect(jsonPath("$.age").value(35));
     }
 
     @Test

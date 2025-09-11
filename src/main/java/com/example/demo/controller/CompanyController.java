@@ -45,8 +45,4 @@ public class CompanyController {
         companyService.deleteCompany(id);
     }
 
-    @DeleteMapping("/all")
-    public void empty() {
-        companyService.empty();
-    }
 }

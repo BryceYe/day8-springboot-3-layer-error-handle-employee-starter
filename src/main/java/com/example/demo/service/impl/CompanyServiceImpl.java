@@ -2,59 +2,63 @@ package com.example.demo.service.impl;
 
 import com.example.demo.entity.Company;
 import com.example.demo.exception.UpdateCompanyException;
-import com.example.demo.repository.CompanyRepository;
+import com.example.demo.repository.ICompanyRepository;
 import com.example.demo.service.CompanyService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class CompanyServiceImpl implements CompanyService {
-    private final CompanyRepository companyRepository;
+    private final ICompanyRepository companyRepository;
 
     public List<Company> getCompanies(Integer page, Integer size) {
-        return companyRepository.getCompanies(page, size);
+        if(page == null || size == null){
+            return companyRepository.findAll();
+        } else {
+            Pageable pageable = PageRequest.of(page - 1, size);
+            return companyRepository.findAll(pageable).toList();
+        }
     }
 
     @Override
     public Company createCompany(Company company) {
-        return companyRepository.createCompany(company);
+        return companyRepository.save(company);
     }
 
     @Override
     public Company getCompanyById(int id) {
-        Company company = companyRepository.getCompanyById(id);
-        if(company == null) {
+        Optional<Company> company = companyRepository.findById(id);
+        if(company.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Company not found with id: " + id);
         }
-        return company;
+        return company.orElse(null);
     }
 
     @Override
     public void deleteCompany(int id) {
         Company company = getCompanyById(id);
         company.setActive(false);
-        companyRepository.updateCompany(id, company);
+        companyRepository.save(company);
     }
 
     @Override
     public Company updateCompany(int id, Company updatedCompany) {
-        Company found = companyRepository.getCompanyById(id);
-        if(found == null) {
+        Optional<Company> company = companyRepository.findById(id);
+        if(company.isEmpty()) {
             throw new UpdateCompanyException("Company not found");
         }
-        if(!found.isActive()) {
+        if(!company.get().isActive()) {
             throw new UpdateCompanyException("Company's active is false");
         }
-        return companyRepository.updateCompany(id, updatedCompany);
-    }
-
-    @Override
-    public void empty() {
-        companyRepository.empty();
+        updatedCompany.setId(id);
+        return companyRepository.save(updatedCompany);
     }
 }

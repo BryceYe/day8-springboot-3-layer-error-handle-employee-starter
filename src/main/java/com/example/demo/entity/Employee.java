@@ -21,6 +21,9 @@ public class Employee {
     private Double salary;
     private boolean active = true;
 
+    @Column(name="company_id")
+    private Integer companyId;
+
     public Employee(Integer id, String name, Integer age, String gender, Double salary) {
         this.id = id;
         this.name = name;
