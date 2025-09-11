@@ -23,22 +23,20 @@ import java.util.Optional;
 public class EmployeeServiceImpl implements EmployeeService {
     private final IEmployeeRepository employeeRepository;
 
-    private final EmployeeMapper employeeMapper;
-
     public List<EmployeeResponse> getEmployees(String gender, Integer page, Integer size) {
         if(gender == null){
             if(page == null || size == null){
-                return employeeMapper.toResponse(employeeRepository.findAll());
+                return EmployeeMapper.toResponse(employeeRepository.findAll());
             } else {
                 Pageable pageable = PageRequest.of(page - 1, size);
-                return employeeMapper.toResponse(employeeRepository.findAll(pageable).toList());
+                return EmployeeMapper.toResponse(employeeRepository.findAll(pageable).toList());
             }
         } else {
             if(page == null || size == null){
-                return employeeMapper.toResponse(employeeRepository.findEmployeesByGender(gender));
+                return EmployeeMapper.toResponse(employeeRepository.findEmployeesByGender(gender));
             } else {
                 Pageable pageable = PageRequest.of(page - 1, size);
-                return employeeMapper.toResponse(employeeRepository.findEmployeesByGender(gender, pageable));
+                return EmployeeMapper.toResponse(employeeRepository.findEmployeesByGender(gender, pageable));
             }
         }
     }
@@ -48,7 +46,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         if(employee.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Employee not found with id: " + id);
         }
-        return employeeMapper.toResponse(employee.get());
+        return EmployeeMapper.toResponse(employee.get());
     }
 
     public EmployeeResponse createEmployee(Employee employee) {
@@ -61,7 +59,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         if(employee.getAge() >= 30 && employee.getSalary() < 20000.0){
             throw new InvalidSalaryEmployeeException("employee salary less than 20000");
         }
-        return employeeMapper.toResponse(employeeRepository.save(employee));
+        return EmployeeMapper.toResponse(employeeRepository.save(employee));
     }
 
     public EmployeeResponse updateEmployee(int id, Employee updatedEmployee) {
@@ -73,7 +71,7 @@ public class EmployeeServiceImpl implements EmployeeService {
             throw new UpdateEmployeeException("Employee's active is false");
         }
         updatedEmployee.setId(id);
-        return employeeMapper.toResponse(employeeRepository.save(updatedEmployee));
+        return EmployeeMapper.toResponse(employeeRepository.save(updatedEmployee));
     }
 
     public void deleteEmployee(int id) {

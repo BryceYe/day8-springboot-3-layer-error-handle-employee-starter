@@ -28,16 +28,15 @@ public class EmployeeServiceTest {
     @Mock
     private IEmployeeRepository employeeRepository;
 
-    @Mock
-    private EmployeeMapper employeeMapper;
-
     @Test
     void should_exception_when_create_an_employee(){
         Employee employee = new Employee(null, "Tom", 20, "MALE", 20000.0);
+        when(employeeRepository.save(any(Employee.class))).thenReturn(employee);
 
         EmployeeResponse employeeResult = employeeServiceImpl.createEmployee(employee);
 
         verify(employeeRepository, atLeastOnce()).save(any(Employee.class));
+
     }
 
     @Test
