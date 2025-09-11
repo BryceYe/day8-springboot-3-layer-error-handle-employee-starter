@@ -1,10 +1,14 @@
 package com.example.demo.service.impl;
 
+import com.example.demo.dto.CompanyRequest;
+import com.example.demo.dto.CompanyResponse;
+import com.example.demo.dto.mapper.CompanyMapper;
 import com.example.demo.entity.Company;
 import com.example.demo.exception.UpdateCompanyException;
 import com.example.demo.repository.ICompanyRepository;
 import com.example.demo.service.CompanyService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -19,38 +23,44 @@ import java.util.Optional;
 public class CompanyServiceImpl implements CompanyService {
     private final ICompanyRepository companyRepository;
 
-    public List<Company> getCompanies(Integer page, Integer size) {
+    public List<CompanyResponse> getCompanies(Integer page, Integer size) {
         if(page == null || size == null){
-            return companyRepository.findAll();
+            return CompanyMapper.toResponse(companyRepository.findAll());
         } else {
             Pageable pageable = PageRequest.of(page - 1, size);
-            return companyRepository.findAll(pageable).toList();
+            return CompanyMapper.toResponse(companyRepository.findAll(pageable).toList());
         }
     }
 
     @Override
-    public Company createCompany(Company company) {
-        return companyRepository.save(company);
+    public CompanyResponse createCompany(CompanyRequest request) {
+        Company company = new Company();
+        BeanUtils.copyProperties(request, company);
+        return CompanyMapper.toResponse(companyRepository.save(company));
     }
 
     @Override
-    public Company getCompanyById(int id) {
+    public CompanyResponse getCompanyById(int id) {
         Optional<Company> company = companyRepository.findById(id);
         if(company.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Company not found with id: " + id);
         }
-        return company.orElse(null);
+        return CompanyMapper.toResponse(company.orElse(null));
     }
 
     @Override
     public void deleteCompany(int id) {
-        Company company = getCompanyById(id);
-        company.setActive(false);
-        companyRepository.save(company);
+        Optional<Company> company = companyRepository.findById(id);
+        if(company.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Company not found with id: " + id);
+        }
+        Company entity = company.get();
+        entity.setActive(false);
+        companyRepository.save(entity);
     }
 
     @Override
-    public Company updateCompany(int id, Company updatedCompany) {
+    public CompanyResponse updateCompany(int id, CompanyRequest request) {
         Optional<Company> company = companyRepository.findById(id);
         if(company.isEmpty()) {
             throw new UpdateCompanyException("Company not found");
@@ -58,7 +68,9 @@ public class CompanyServiceImpl implements CompanyService {
         if(!company.get().isActive()) {
             throw new UpdateCompanyException("Company's active is false");
         }
+        Company updatedCompany = new Company();
+        BeanUtils.copyProperties(request, updatedCompany);
         updatedCompany.setId(id);
-        return companyRepository.save(updatedCompany);
+        return CompanyMapper.toResponse(companyRepository.save(updatedCompany));
     }
 }

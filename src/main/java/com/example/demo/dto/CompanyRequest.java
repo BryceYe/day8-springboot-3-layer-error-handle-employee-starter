@@ -11,9 +11,17 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CompanyRequest {
-    private Integer id;
     private String name;
+    private boolean active;
 
     private List<Employee> employees;
 
+    public CompanyRequest(String name) {
+        this.name = name;
+    }
+
+    public CompanyRequest(String name, List<Employee> employees) {
+        this.name = name;
+        this.employees = employees;
+    }
 }

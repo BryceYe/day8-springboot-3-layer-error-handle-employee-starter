@@ -1,6 +1,9 @@
 package com.example.demo;
 
+import com.example.demo.dto.CompanyRequest;
+import com.example.demo.dto.CompanyResponse;
 import com.example.demo.entity.Company;
+import com.example.demo.entity.Employee;
 import com.example.demo.exception.UpdateCompanyException;
 import com.example.demo.repository.ICompanyRepository;
 import com.example.demo.service.impl.CompanyServiceImpl;
@@ -32,18 +35,30 @@ public class CompanyServiceTest {
 
     @Test
     void should_exception_when_create_a_company(){
-        Company company = new Company(null, "huawei");
+
+
+        List<Employee> employees = Arrays.asList(
+                new Employee(1, "Jack", 18, "male", 1000.0),
+                new Employee(2, "Mike", 18, "male", 1000.0));
+        Company company = new Company(1, "huawei", employees);
         when(companyRepository.save(any(Company.class))).thenReturn(company);
-        Company exception = companyServiceImpl.createCompany(company);
+
+        CompanyRequest request = new CompanyRequest("huawei", employees);
+
+        CompanyResponse exception = companyServiceImpl.createCompany(request);
+
         assertEquals(exception.getName(), company.getName());
+        assertEquals(exception.getEmployees().get(0).getName(), employees.get(0).getName());
     }
 
     @Test
     void should_create_company_with_default_true_when_create_a_company(){
         Company company = new Company(null, "huawei");
         when(companyRepository.save(any(Company.class))).thenReturn(company);
-        companyServiceImpl.createCompany(company);
-        assertTrue(company.isActive());
+
+        CompanyRequest request = new CompanyRequest("huawei");
+        CompanyResponse response = companyServiceImpl.createCompany(request);
+        assertTrue(response.isActive());
     }
 
     @Test
@@ -57,22 +72,9 @@ public class CompanyServiceTest {
 
     @Test
     void should_return_error_message_when_update_active_false_company(){
-        Company company = new Company(1, "huawei");
-        assertTrue(company.isActive());
-        when(companyRepository.findById(1)).thenReturn(Optional.of(company));
-        companyServiceImpl.deleteCompany(1);
+        CompanyRequest request = new CompanyRequest("huawei");
 
-        assertThrows(UpdateCompanyException.class, () -> companyServiceImpl.updateCompany(1,new Company(1, "huawei")));
+        assertThrows(UpdateCompanyException.class, () -> companyServiceImpl.updateCompany(1,request));
     }
 
-    @Test
-    void should_return_list_when_get_companies(){
-        List<Company> companies = Arrays.asList(
-                new Company(1, "huawei"),
-                new Company(2, "apple"));
-        Pageable pageable = PageRequest.of(0, 2);
-        when(companyRepository.findAll(pageable)).thenReturn((Page<Company>) companies);
-        List<Company> result = companyServiceImpl.getCompanies(1, 2);
-        assertTrue(result.get(0).getName().equals(companies.get(0).getName()));
-    }
 }

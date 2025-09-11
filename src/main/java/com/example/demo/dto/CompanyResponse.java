@@ -13,6 +13,7 @@ import java.util.List;
 public class CompanyResponse {
     private Integer id;
     private String name;
+    private boolean active;
 
     private List<Employee> employees;
 }

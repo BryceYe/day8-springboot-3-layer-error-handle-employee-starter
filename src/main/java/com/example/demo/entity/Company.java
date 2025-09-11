@@ -27,4 +27,10 @@ public class Company {
         this.id = id;
         this.name = name;
     }
+
+    public Company( Integer id,  String name, List<Employee> employees) {
+        this.name = name;
+        this.employees = employees;
+        this.id = id;
+    }
 }
