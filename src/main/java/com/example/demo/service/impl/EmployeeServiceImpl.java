@@ -1,5 +1,6 @@
 package com.example.demo.service.impl;
 
+import com.example.demo.dto.EmployeeRequest;
 import com.example.demo.dto.EmployeeResponse;
 import com.example.demo.dto.mapper.EmployeeMapper;
 import com.example.demo.entity.Employee;
@@ -9,6 +10,7 @@ import com.example.demo.exception.UpdateEmployeeException;
 import com.example.demo.repository.IEmployeeRepository;
 import com.example.demo.service.EmployeeService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -49,20 +51,22 @@ public class EmployeeServiceImpl implements EmployeeService {
         return EmployeeMapper.toResponse(employee.get());
     }
 
-    public EmployeeResponse createEmployee(Employee employee) {
-        if(employee.getAge() == null) {
+    public EmployeeResponse createEmployee(EmployeeRequest request) {
+        if(request.getAge() == null) {
             throw new InvalidAgeEmployeeException("employee age is null");
         }
-        if(employee.getAge() < 18 || employee.getAge() > 65) {
+        if(request.getAge() < 18 || request.getAge() > 65) {
             throw new InvalidAgeEmployeeException("employee age less than 18 or greater than 65");
         }
-        if(employee.getAge() >= 30 && employee.getSalary() < 20000.0){
+        if(request.getAge() >= 30 && request.getSalary() < 20000.0){
             throw new InvalidSalaryEmployeeException("employee salary less than 20000");
         }
+        Employee employee = new Employee();
+        BeanUtils.copyProperties(request, employee);
         return EmployeeMapper.toResponse(employeeRepository.save(employee));
     }
 
-    public EmployeeResponse updateEmployee(int id, Employee updatedEmployee) {
+    public EmployeeResponse updateEmployee(int id, EmployeeRequest request) {
         Optional<Employee> employee = employeeRepository.findById(id);
         if(employee.isEmpty()) {
             throw new UpdateEmployeeException("Employee is not found");
@@ -70,7 +74,9 @@ public class EmployeeServiceImpl implements EmployeeService {
         if(!employee.get().isActive()){
             throw new UpdateEmployeeException("Employee's active is false");
         }
-        updatedEmployee.setId(id);
+        request.setId(id);
+        Employee updatedEmployee = new Employee();
+        BeanUtils.copyProperties(request, updatedEmployee);
         return EmployeeMapper.toResponse(employeeRepository.save(updatedEmployee));
     }
 

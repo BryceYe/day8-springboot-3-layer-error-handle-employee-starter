@@ -1,7 +1,7 @@
 package com.example.demo.service;
 
+import com.example.demo.dto.EmployeeRequest;
 import com.example.demo.dto.EmployeeResponse;
-import com.example.demo.entity.Employee;
 
 import java.util.List;
 
@@ -10,9 +10,9 @@ public interface EmployeeService {
 
     EmployeeResponse getEmployeeById(int id);
 
-    EmployeeResponse createEmployee(Employee employee);
+    EmployeeResponse createEmployee(EmployeeRequest request);
 
-    EmployeeResponse updateEmployee(int id, Employee updatedEmployee);
+    EmployeeResponse updateEmployee(int id, EmployeeRequest request);
 
     void deleteEmployee(int id);
 }

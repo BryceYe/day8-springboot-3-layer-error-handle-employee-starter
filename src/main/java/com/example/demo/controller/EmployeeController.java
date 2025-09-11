@@ -2,10 +2,8 @@ package com.example.demo.controller;
 
 import com.example.demo.dto.EmployeeRequest;
 import com.example.demo.dto.EmployeeResponse;
-import com.example.demo.entity.Employee;
 import com.example.demo.service.EmployeeService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,17 +28,13 @@ public class EmployeeController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public EmployeeResponse createEmployee(@RequestBody EmployeeRequest request) {
-        Employee employee = new Employee();
-        BeanUtils.copyProperties(request, employee);
-        return employeeService.createEmployee(employee);
+        return employeeService.createEmployee(request);
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public EmployeeResponse updateEmployee(@PathVariable int id, @RequestBody EmployeeRequest request) {
-        Employee updatedEmployee = new Employee();
-        BeanUtils.copyProperties(request, updatedEmployee);
-        return employeeService.updateEmployee(id, updatedEmployee);
+        return employeeService.updateEmployee(id, request);
     }
 
     @DeleteMapping("/{id}")
