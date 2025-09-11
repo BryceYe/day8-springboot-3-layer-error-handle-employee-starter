@@ -1,26 +1,26 @@
 package com.example.demo.dto.mapper;
 
-import com.example.demo.dto.EmployeeRequest;
-import com.example.demo.dto.EmployeeResponse;
-import com.example.demo.entity.Employee;
+import com.example.demo.dto.CompanyRequest;
+import com.example.demo.dto.CompanyResponse;
+import com.example.demo.entity.Company;
 import org.springframework.beans.BeanUtils;
 
 import java.util.List;
 
 public class CompanyMapper {
-    public static EmployeeResponse toResponse(Employee employee) {
-        EmployeeResponse employeeResponse = new EmployeeResponse();
-        BeanUtils.copyProperties(employee, employeeResponse);
-        return employeeResponse;
+    public static CompanyResponse toResponse(Company company) {
+        CompanyResponse companyResponse = new CompanyResponse();
+        BeanUtils.copyProperties(company, companyResponse);
+        return companyResponse;
     }
 
-    public static List<EmployeeResponse> toResponse(List<Employee> employees) {
-        return employees.stream().map(EmployeeMapper::toResponse).toList();
+    public static List<CompanyResponse> toResponse(List<Company> companies) {
+        return companies.stream().map(CompanyMapper::toResponse).toList();
     }
 
-    public static EmployeeRequest toRequest(Employee employee) {
-        EmployeeRequest employeeRequest = new EmployeeRequest();
-        BeanUtils.copyProperties(employee, employeeRequest);
-        return employeeRequest;
+    public static CompanyRequest toRequest(Company company) {
+        CompanyRequest companyRequest = new CompanyRequest();
+        BeanUtils.copyProperties(company, companyRequest);
+        return companyRequest;
     }
 }
