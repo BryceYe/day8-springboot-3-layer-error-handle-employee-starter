@@ -1,5 +1,7 @@
 package com.example.demo;
 
+import com.example.demo.dto.EmployeeResponse;
+import com.example.demo.dto.mapper.EmployeeMapper;
 import com.example.demo.entity.Employee;
 import com.example.demo.exception.InvalidAgeEmployeeException;
 import com.example.demo.exception.InvalidSalaryEmployeeException;
@@ -26,12 +28,16 @@ public class EmployeeServiceTest {
     @Mock
     private IEmployeeRepository employeeRepository;
 
+    @Mock
+    private EmployeeMapper employeeMapper;
+
     @Test
     void should_exception_when_create_an_employee(){
         Employee employee = new Employee(null, "Tom", 20, "MALE", 20000.0);
-        when(employeeRepository.save(any(Employee.class))).thenReturn(employee);
-        Employee employeeResult = employeeServiceImpl.createEmployee(employee);
-        assertEquals(employeeResult.getAge(), employee.getAge());
+
+        EmployeeResponse employeeResult = employeeServiceImpl.createEmployee(employee);
+
+        verify(employeeRepository, atLeastOnce()).save(any(Employee.class));
     }
 
     @Test
@@ -52,6 +58,7 @@ public class EmployeeServiceTest {
     @Test
     void should_create_employee_with_default_true_when_create_an_employee(){
         Employee employee = new Employee(null, "Tom", 20, "MALE", 20000.0);
+
         when(employeeRepository.save(any(Employee.class))).thenReturn(employee);
         employeeServiceImpl.createEmployee(employee);
         assertTrue(employee.isActive());

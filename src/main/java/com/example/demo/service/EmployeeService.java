@@ -6,13 +6,13 @@ import com.example.demo.entity.Employee;
 import java.util.List;
 
 public interface EmployeeService {
-    List<Employee> getEmployees(String gender, Integer page, Integer size);
+    List<EmployeeResponse> getEmployees(String gender, Integer page, Integer size);
 
-    Employee getEmployeeById(int id);
+    EmployeeResponse getEmployeeById(int id);
 
-    Employee createEmployee(Employee employee);
+    EmployeeResponse createEmployee(Employee employee);
 
-    Employee updateEmployee(int id, Employee updatedEmployee);
+    EmployeeResponse updateEmployee(int id, Employee updatedEmployee);
 
     void deleteEmployee(int id);
 }
