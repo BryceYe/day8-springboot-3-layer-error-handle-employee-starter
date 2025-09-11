@@ -1,7 +1,6 @@
 package com.example.demo;
 
 import com.example.demo.entity.Employee;
-import com.example.demo.repository.EmployeeRepository;
 import com.google.gson.Gson;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -9,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -21,9 +21,12 @@ public class EmployeeControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
+
     @BeforeEach
-    public void setUp() throws Exception {
-        mockMvc.perform(delete("/employees/all"));
+    public void setUp(){
+        jdbcTemplate.execute("truncate table employee;");
     }
 
     private void createJohnSmith() throws Exception {

@@ -14,6 +14,4 @@ public interface EmployeeService {
     Employee updateEmployee(int id, Employee updatedEmployee);
 
     void deleteEmployee(int id);
-
-    void empty();
 }

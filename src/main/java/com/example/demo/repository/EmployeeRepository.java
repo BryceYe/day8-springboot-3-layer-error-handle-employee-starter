@@ -1,7 +1,7 @@
 package com.example.demo.repository;
 
 import com.example.demo.entity.Employee;
-import com.example.demo.exception.UpdateEmployeeException;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -22,7 +22,6 @@ public class EmployeeRepository {
         }
         return stream.toList();
     }
-
 
     public Employee getEmployeeById(int id) {
         return employees.stream()

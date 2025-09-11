@@ -4,31 +4,47 @@ import com.example.demo.entity.Employee;
 import com.example.demo.exception.InvalidAgeEmployeeException;
 import com.example.demo.exception.InvalidSalaryEmployeeException;
 import com.example.demo.exception.UpdateEmployeeException;
-import com.example.demo.repository.EmployeeRepository;
+import com.example.demo.repository.IEmployeeRepository;
 import com.example.demo.service.EmployeeService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class EmployeeServiceImpl implements EmployeeService {
-    private final EmployeeRepository employeeRepository;
+    private final IEmployeeRepository employeeRepository;
 
     public List<Employee> getEmployees(String gender, Integer page, Integer size) {
-        return employeeRepository.getEmployees(gender, page, size);
+        if(gender == null){
+            if(page == null || size == null){
+                return employeeRepository.findAll();
+            } else {
+                Pageable pageable = PageRequest.of(page - 1, size);
+                return employeeRepository.findAll(pageable).toList();
+            }
+        } else {
+            if(page == null || size == null){
+                return employeeRepository.findEmployeesByGender(gender);
+            } else {
+                Pageable pageable = PageRequest.of(page - 1, size);
+                return employeeRepository.findEmployeesByGender(gender, pageable);
+            }
+        }
     }
 
     public Employee getEmployeeById(int id) {
-        Employee employee = employeeRepository.getEmployeeById(id);
-        if(employee == null) {
+        Optional<Employee> employee = employeeRepository.findById(id);
+        if(employee.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Employee not found with id: " + id);
         }
-        return employee;
+        return employee.get();
     }
 
     public Employee createEmployee(Employee employee) {
@@ -41,27 +57,24 @@ public class EmployeeServiceImpl implements EmployeeService {
         if(employee.getAge() >= 30 && employee.getSalary() < 20000.0){
             throw new InvalidSalaryEmployeeException("employee salary less than 20000");
         }
-        return employeeRepository.createEmployee(employee);
+        return employeeRepository.save(employee);
     }
 
     public Employee updateEmployee(int id, Employee updatedEmployee) {
-        Employee found = employeeRepository.getEmployeeById(id);
-        if(found == null) {
+        Optional<Employee> employee = employeeRepository.findById(id);
+        if(employee.isEmpty()) {
             throw new UpdateEmployeeException("Employee is not found");
         }
-        if(!found.isActive()){
+        if(!employee.get().isActive()){
             throw new UpdateEmployeeException("Employee's active is false");
         }
-        return employeeRepository.updateEmployee(id, updatedEmployee);
+        updatedEmployee.setId(id);
+        return employeeRepository.save(updatedEmployee);
     }
 
     public void deleteEmployee(int id) {
         Employee employee = getEmployeeById(id);
         employee.setActive(false);
-        employeeRepository.updateEmployee(id, employee);
-    }
-
-    public void empty() {
-        employeeRepository.empty();
+        employeeRepository.save(employee);
     }
 }
