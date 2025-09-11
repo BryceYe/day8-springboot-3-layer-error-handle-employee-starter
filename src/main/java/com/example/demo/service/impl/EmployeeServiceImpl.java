@@ -74,9 +74,9 @@ public class EmployeeServiceImpl implements EmployeeService {
         if(!employee.get().isActive()){
             throw new UpdateEmployeeException("Employee's active is false");
         }
-        request.setId(id);
         Employee updatedEmployee = new Employee();
         BeanUtils.copyProperties(request, updatedEmployee);
+        updatedEmployee.setId(id);
         return EmployeeMapper.toResponse(employeeRepository.save(updatedEmployee));
     }
 

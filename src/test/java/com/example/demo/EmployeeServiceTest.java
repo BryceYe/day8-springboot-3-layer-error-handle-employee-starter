@@ -33,7 +33,7 @@ public class EmployeeServiceTest {
         Employee employee = new Employee(null, "Tom", 20, "MALE", 20000.0);
         when(employeeRepository.save(any(Employee.class))).thenReturn(employee);
 
-        EmployeeRequest request = new EmployeeRequest(null, "Tom", 20, "MALE", 20000.0);
+        EmployeeRequest request = new EmployeeRequest("Tom", 20, "MALE", 20000.0);
 
         EmployeeResponse employeeResult = employeeServiceImpl.createEmployee(request);
 
@@ -43,14 +43,14 @@ public class EmployeeServiceTest {
 
     @Test
     void should_throw_exception_when_create_an_employee_of_greater_than_65_or_less_than_18(){
-        EmployeeRequest request = new EmployeeRequest(null, "Tom", 16, "MALE", 15000.0);
+        EmployeeRequest request = new EmployeeRequest("Tom", 16, "MALE", 15000.0);
 
         assertThrows(InvalidAgeEmployeeException.class, () -> employeeServiceImpl.createEmployee(request));
     }
 
     @Test
     void should_throw_exception_when_create_an_employee_the_age_over_30_and_salary_less_than_20000(){
-        EmployeeRequest request = new EmployeeRequest(null, "Tom", 30, "MALE", 15000.0);
+        EmployeeRequest request = new EmployeeRequest("Tom", 30, "MALE", 15000.0);
 
         assertThrows(InvalidSalaryEmployeeException.class, () -> employeeServiceImpl.createEmployee(request));
     }
@@ -58,7 +58,7 @@ public class EmployeeServiceTest {
     @Test
     void should_create_employee_with_default_true_when_create_an_employee(){
         Employee employee = new Employee(null, "Tom", 20, "MALE", 20000.0);
-        EmployeeRequest request = new EmployeeRequest(null, "Tom", 20, "MALE", 20000.0);
+        EmployeeRequest request = new EmployeeRequest("Tom", 20, "MALE", 20000.0);
 
         when(employeeRepository.save(any(Employee.class))).thenReturn(employee);
         employeeServiceImpl.createEmployee(request);
@@ -79,7 +79,7 @@ public class EmployeeServiceTest {
         Employee employee = new Employee(1, "John", 20, "male", 60000.0);
         when(employeeRepository.findById(1)).thenReturn(Optional.of(employee));
         employee.setActive(false);
-        EmployeeRequest updatedEmployee = new EmployeeRequest(1, "John",28, "male", 60000.0);
+        EmployeeRequest updatedEmployee = new EmployeeRequest("John",28, "male", 60000.0);
         assertThrows(Exception.class, () -> {
             employeeServiceImpl.updateEmployee(1, updatedEmployee);
         });
