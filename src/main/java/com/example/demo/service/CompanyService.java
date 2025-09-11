@@ -2,7 +2,6 @@ package com.example.demo.service;
 
 import com.example.demo.dto.CompanyRequest;
 import com.example.demo.dto.CompanyResponse;
-import com.example.demo.entity.Company;
 
 import java.util.List;
 
